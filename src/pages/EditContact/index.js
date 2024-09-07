@@ -1,10 +1,14 @@
 import React from 'react';
 import PageHeader from '../../components/PageHeader';
-
-// import { Container } from './styles';
+import ContactForm from '../../components/ContactForm';
 
 function NewContact() {
-  return <PageHeader title="Cadastrar novo" />;
+  return (
+    <>
+      <PageHeader title="Editar" />
+      <ContactForm buttonLabel="Salvar alterações" />
+    </>
+  );
 }
 
 export default NewContact;

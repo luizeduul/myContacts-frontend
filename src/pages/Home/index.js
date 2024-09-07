@@ -33,27 +33,9 @@ export default function Home() {
             <span>(44) 99999-9999</span>
           </div>
           <div className="actions">
-            <a href="?">
+            <Link to="/1">
               <img src={edit} alt="Edit" />
-            </a>
-            <button type="button">
-              <img src={trash} alt="Delete" />
-            </button>
-          </div>
-        </Card>
-        <Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Luiz</strong>
-              <small>Instagram</small>
-            </div>
-            <span>luizeduardr@gmail.com</span>
-            <span>(44) 99999-9999</span>
-          </div>
-          <div className="actions">
-            <a href="?">
-              <img src={edit} alt="Edit" />
-            </a>
+            </Link>
             <button type="button">
               <img src={trash} alt="Delete" />
             </button>
