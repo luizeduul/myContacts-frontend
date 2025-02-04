@@ -6,7 +6,8 @@ import { FormGroup } from '../FormGroup';
 import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
-import isEmailValid from '../../utils/validators';
+import { isEmailValid } from '../../utils/validators';
+import useErrors from '../../hooks/useErrors';
 
 function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('');
@@ -14,8 +15,7 @@ function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
 
-  // eslint-disable-next-line no-unused-vars
-  const [erros, setErrors] = useState([]);
+  const { setError, removeError, getErrorMessageByFieldName } = useErrors();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -26,43 +26,39 @@ function ContactForm({ buttonLabel }) {
     setName(event.target.value);
 
     if (!event.target.value) {
-      setErrors((prevState) => [
-        ...prevState,
-        { field: 'name', message: 'Nome é obrigatório' },
-      ]);
+      setError({ field: 'name', message: 'Nome é obrigatório' });
     } else {
-      setErrors((prevState) => prevState.filter((item) => item.field !== 'name'));
+      removeError('name');
     }
   }
 
   function handleChangeEmail(event) {
     setEmail(event.target.value);
-    if (isEmailValid(event.target.value)) {
-      setErrors((prevState) => [
-        ...prevState,
-        { field: 'name', message: 'Nome é obrigatório' },
-      ]);
+    if (event.target.value && !isEmailValid(event.target.value)) {
+      setError({ field: 'email', message: 'Nome é obrigatório' });
     } else {
-      setErrors((prevState) => prevState.filter((item) => item.field !== 'name'));
+      removeError('email');
     }
   }
+
   return (
-    <Form onSubmit={handleSubmit} method="post">
-      <FormGroup>
+    <Form onSubmit={handleSubmit} method="post" noValidate>
+      <FormGroup error={getErrorMessageByFieldName('nome')}>
         <Input
           placeholder="Nome"
           value={name}
           onChange={handleChangeName}
+          error={getErrorMessageByFieldName('nome')}
         />
       </FormGroup>
 
-      <FormGroup
-        error="O formato do e-mail é inválido"
-      >
+      <FormGroup error={getErrorMessageByFieldName('email')}>
         <Input
+          type="email"
           placeholder="E-mail"
           value={email}
           onChange={handleChangeEmail}
+          error={getErrorMessageByFieldName('email')}
         />
       </FormGroup>
 
