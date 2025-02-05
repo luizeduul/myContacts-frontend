@@ -8,6 +8,7 @@ import Select from '../Select';
 import Button from '../Button';
 import { isEmailValid } from '../../utils/validators';
 import useErrors from '../../hooks/useErrors';
+import formatPhone from '../../utils/formatPhone';
 
 function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('');
@@ -15,7 +16,11 @@ function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
 
-  const { setError, removeError, getErrorMessageByFieldName } = useErrors();
+  const {
+    errors, setError, removeError, getErrorMessageByFieldName,
+  } = useErrors();
+
+  const isFormValid = name && !errors.length;
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -41,11 +46,20 @@ function ContactForm({ buttonLabel }) {
     }
   }
 
+  function handleChangePhone(event) {
+    setPhone(formatPhone(event.target.value));
+    // if (event.target.value && !isEmailValid(event.target.value)) {
+    //   setError({ field: 'email', message: 'Nome é obrigatório' });
+    // } else {
+    //   removeError('email');
+    // }
+  }
+
   return (
     <Form onSubmit={handleSubmit} method="post" noValidate>
       <FormGroup error={getErrorMessageByFieldName('nome')}>
         <Input
-          placeholder="Nome"
+          placeholder="Nome *"
           value={name}
           onChange={handleChangeName}
           error={getErrorMessageByFieldName('nome')}
@@ -66,7 +80,7 @@ function ContactForm({ buttonLabel }) {
         <Input
           placeholder="Telefone"
           value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          onChange={handleChangePhone}
         />
       </FormGroup>
 
@@ -82,7 +96,7 @@ function ContactForm({ buttonLabel }) {
         </Select>
       </FormGroup>
 
-      <Button type="submit">
+      <Button type="submit" disabled={!isFormValid}>
         {buttonLabel}
       </Button>
     </Form>
