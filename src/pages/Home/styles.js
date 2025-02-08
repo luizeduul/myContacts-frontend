@@ -47,10 +47,8 @@ export const Header = styled.header`
   }
 `;
 
-export const ListContainer = styled.div`
-  margin-top: 24px;
-
-  header{
+export const ListHeader = styled.header`
+    margin-top: 24px;
     margin-bottom: 8px;
 
     button{
@@ -64,7 +62,11 @@ export const ListContainer = styled.div`
         font-weight: bold;
         color: ${({ theme }) => theme.colors.primary.main}
       }
-    }
+
+      img{
+        transform: rotate(${({ orderBy }) => (orderBy === 'asc' ? 180 : 0)}deg);
+        transition: transform 0.2s ease-in;
+      }
   }
 `;
 
