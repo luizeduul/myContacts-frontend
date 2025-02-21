@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 import { Link } from 'react-router-dom';
 import {
@@ -45,7 +46,7 @@ export default function Home() {
     return () => {
       setContacts([]);
     };
-  }, [loadContacts, orderBy]);
+  }, [loadContacts]);
 
   const filteredContacts = useMemo(() => {
     return contacts.filter((contact) => contact.name.toLowerCase().includes(search.toLowerCase()));
@@ -66,15 +67,22 @@ export default function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
-      <InputSearchContainer>
-        <input
-          type="text"
-          placeholder="Pesquise pelo nome"
-          onChange={handleSearch}
-        />
-      </InputSearchContainer>
-      <Header hasError={hasError}>
-        {!hasError && (
+      {contacts.length ? (
+        <InputSearchContainer>
+          <input
+            type="text"
+            placeholder="Pesquise pelo nome"
+            onChange={handleSearch}
+          />
+        </InputSearchContainer>
+      ) : null}
+      <Header justifyContent={
+        hasError ? 'flex-end' : (
+          contacts.length > 0 ? 'space-between' : 'center'
+        )
+}
+      >
+        {(!hasError && contacts.length > 0) && (
           <strong>
             {contacts.length}
             {' '}

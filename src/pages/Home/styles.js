@@ -26,7 +26,7 @@ export const InputSearchContainer = styled.div`
 
 export const Header = styled.header`
   display: flex;
-  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')} ;
+  justify-content: ${({ justifyContent }) => justifyContent} ;
   align-items: center;
   border: 2px solid ${({ theme }) => theme.colors.gray[100]};
   padding-bottom: 16px;
