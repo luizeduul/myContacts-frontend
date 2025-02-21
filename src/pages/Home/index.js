@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 import { Link } from 'react-router-dom';
@@ -9,12 +11,14 @@ import {
   Card,
   InputSearchContainer,
   ErrorContainer,
+  EmptyListContainer,
 } from './styles';
 import Loader from '../../components/Loader';
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/pen.svg';
 import trash from '../../assets/images/icons/trash.svg';
 import sad from '../../assets/images/sad.svg';
+import emptyBox from '../../assets/images/empty-box.svg';
 import ContactsService from '../../services/ContactsService';
 import Button from '../../components/Button';
 
@@ -29,7 +33,7 @@ export default function Home() {
     setIsLoading(true);
 
     try {
-      const contactsList = await ContactsService.listContacts(orderBy);
+      const contactsList = []; await ContactsService.listContacts(orderBy);
 
       setHasError(false);
 
@@ -109,6 +113,15 @@ export default function Home() {
 
       {!hasError && (
         <>
+          {contacts.length === 0 && (
+          <EmptyListContainer>
+            <img src={emptyBox} alt="Empty box" />
+            <p>
+              Você ainda não tem nenhum contato cadastrado.
+              Clique no botão <strong>"Novo contato"</strong> acima para cadastrar o seu primeiro!
+            </p>
+          </EmptyListContainer>
+          )}
           {filteredContacts.length > 0 && (
           <ListHeader orderBy={orderBy}>
             <button type="button" onClick={handleChangeOrder}>
