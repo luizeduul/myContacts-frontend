@@ -138,7 +138,7 @@ export const ErrorContainer = styled.div`
 
 export const EmptyListContainer = styled.div`
   margin-top: 16px;;
-  display: 'flex';
+  display: flex;
   flex-direction: column;
   align-items: center;
   p{
@@ -150,4 +150,17 @@ export const EmptyListContainer = styled.div`
 
     }
   }
+`;
+
+export const SearchNotFoundContainer = styled.div`
+    margin-top: 16px;
+    display: flex;
+    align-items: flex-start;
+
+    spam{
+      color: ${({ theme }) => theme.colors.gray[200]};
+      margin-left: 25px;
+      word-break: 'break-word';
+
+    }
 `;
