@@ -157,7 +157,7 @@ export const SearchNotFoundContainer = styled.div`
     display: flex;
     align-items: flex-start;
 
-    spam{
+    span{
       color: ${({ theme }) => theme.colors.gray[200]};
       margin-left: 25px;
       word-break: 'break-word';

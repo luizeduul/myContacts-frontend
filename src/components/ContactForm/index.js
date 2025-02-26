@@ -12,7 +12,7 @@ import useErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import CategoriesService from '../../services/CategoriesService';
 
-function ContactForm({ buttonLabel }) {
+function ContactForm({ buttonLabel, onSubmit }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -40,7 +40,9 @@ function ContactForm({ buttonLabel }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    return null;
+    onSubmit({
+      name, email, phone, categoryId,
+    });
   }
 
   function handleChangeName(event) {
@@ -123,6 +125,7 @@ function ContactForm({ buttonLabel }) {
 }
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;
