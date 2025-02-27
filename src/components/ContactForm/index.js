@@ -12,12 +12,13 @@ import useErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import CategoriesService from '../../services/CategoriesService';
 
-function ContactForm({ buttonLabel }) {
+function ContactForm({ buttonLabel, onSubmit }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categpriesList, setCategoriesList] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   const {
     errors, setError, removeError, getErrorMessageByFieldName,
@@ -28,7 +29,9 @@ function ContactForm({ buttonLabel }) {
       try {
         const categories = await CategoriesService.listCategories();
         setCategoriesList(categories);
-      } catch {}
+      } catch {} finally {
+        setLoadingCategories(false);
+      }
     }
     loadCategories();
   }, []);
@@ -37,7 +40,9 @@ function ContactForm({ buttonLabel }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    return null;
+    onSubmit({
+      name, email, phone, categoryId,
+    });
   }
 
   function handleChangeName(event) {
@@ -97,10 +102,11 @@ function ContactForm({ buttonLabel }) {
         />
       </FormGroup>
 
-      <FormGroup>
+      <FormGroup isLoading={loadingCategories}>
         <Select
           onChange={(event) => setCategoryId(event.target.value)}
           value={categoryId}
+          disabled={loadingCategories}
         >
           <option value="">Sem categoria</option>
           {categpriesList.map((category) => (
@@ -119,6 +125,7 @@ function ContactForm({ buttonLabel }) {
 }
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

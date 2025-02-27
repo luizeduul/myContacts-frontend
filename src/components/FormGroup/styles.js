@@ -1,5 +1,17 @@
 import styled from 'styled-components';
 
+export const Overlay = styled.div`
+  width: 100%;
+  height: 100%;
+  position:fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(246, 245, 252, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const Container = styled.div`
   & + &{
     margin-top: 16px;
@@ -10,5 +22,15 @@ export const Container = styled.div`
     font-size: 12px;
     display: block;
     margin-top: 8px;
+  }
+
+  .form-item{
+    position: relative;
+
+    .loader {
+      position: absolute;
+      top: 18px;
+      right: 16px;
+    }
   }
 `;
