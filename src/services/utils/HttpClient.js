@@ -5,31 +5,37 @@ class HttpClient {
     this.baseUrl = baseUrl;
   }
 
-  async get(path) {
-    const response = await fetch(`${this.baseUrl}/${path}`);
-
-    const contentType = response.headers.get('content-type');
-
-    let body = {};
-
-    if (contentType && contentType.includes('application/json')) {
-      body = await response.json();
-    }
-
-    if (response.ok) {
-      return body;
-    }
-
-    throw new APIError(response, body);
+  get(path, options) {
+    return this.makeRequest(path, {
+      method: 'GET',
+      headers: options?.headers,
+    });
   }
 
-  async post(path, body) {
-    const headers = new Headers({
-      'Content-Type': 'application/json',
-    });
-    const response = await fetch(`${this.baseUrl}/${path}`, {
+  post(path, options) {
+    return this.makeRequest(path, {
       method: 'POST',
-      body: JSON.stringify(body),
+      body: options?.body,
+      headers: options?.headers,
+    });
+  }
+
+  async makeRequest(path, options) {
+    const headers = new Headers();
+
+    if (options?.body) {
+      headers.append('Content-Type', 'application/json');
+    }
+
+    if (options?.headers) {
+      Object.entries(options?.headers).forEach(([key, value]) => {
+        headers.append(key, value);
+      });
+    }
+
+    const response = await fetch(`${this.baseUrl}/${path}`, {
+      method: options.method,
+      body: options?.body ? JSON.stringify(options.body) : undefined,
       headers,
     });
 
