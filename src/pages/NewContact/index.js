@@ -2,6 +2,7 @@ import React from 'react';
 import PageHeader from '../../components/PageHeader';
 import ContactForm from '../../components/ContactForm';
 import ContactsService from '../../services/ContactsService';
+import { toastError, toastSuccess } from '../../utils/toast';
 
 function NewContact() {
   async function handleSubmit(values) {
@@ -12,10 +13,11 @@ function NewContact() {
         phone: values.phone,
         category_id: values.categoryId,
       };
-      const response = await ContactsService.createContact(contact);
-      console.log(response);
+      await ContactsService.createContact(contact);
+
+      toastSuccess('Contato cadastrado com sucesso.');
     } catch (error) {
-      console.error(error);
+      toastError('Ocorreu um erro ao cadastrar o contato');
     }
   }
   return (

@@ -10,9 +10,9 @@ const containerVariants = {
   success: css`
         background: ${({ theme }) => theme.colors.success.main}
    `,
-//   info: css`
-//         background: ${({ theme }) => theme.colors.primary.main}
-//   `,
+  //   info: css`
+  //         background: ${({ theme }) => theme.colors.primary.main}
+  //   `,
 };
 
 export const Container = styled.div`
@@ -30,7 +30,7 @@ export const Container = styled.div`
         margin-top: 12px;
     }
 
-    strong{
-        margin-left: 8px;
+    img{
+        margin-right: 8px;
     }
 `;
