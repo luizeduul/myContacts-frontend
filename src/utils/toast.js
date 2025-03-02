@@ -2,22 +2,22 @@ import EventManager from '../lib/EventManager';
 
 export const ToastEventManager = new EventManager();
 
-export default function toast({ type, text }) {
-  ToastEventManager.emit('addtoast', { type, text });
+export default function toast({ type, text, duration }) {
+  ToastEventManager.emit('addtoast', { type, text, duration });
 }
 
-export function toastSuccess(text) {
-  toast({ type: 'success', text });
+export function toastSuccess(text, duration) {
+  toast({ type: 'success', text, duration });
 }
 
-export function toastError(text) {
-  toast({ type: 'danger', text });
+export function toastError(text, duration) {
+  toast({ type: 'danger', text, duration });
 }
 
-export function toastWarning(text) {
-  toast({ type: 'warning', text });
+export function toastWarning(text, duration) {
+  toast({ type: 'warning', text, duration });
 }
 
-export function toastInfo(text) {
-  toast({ type: 'info', text });
+export function toastInfo(text, duration) {
+  toast({ type: 'info', text, duration });
 }
