@@ -11,7 +11,7 @@ Spinner.propTypes = {
 };
 
 Spinner.defaultProps = {
-  size: 90,
+  size: 32,
 };
 
 export default Spinner;

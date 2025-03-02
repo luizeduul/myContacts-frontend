@@ -9,7 +9,7 @@ function Loader({ isLoading }) {
 
   return ReactDOM.createPortal(
     <Overlay>
-      <Spinner />
+      <Spinner size={90} />
     </Overlay>,
     document.getElementById('loader-root'),
   );

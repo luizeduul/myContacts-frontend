@@ -11,7 +11,9 @@ class ContactsService {
   }
 
   createContact(contact) {
-    return this.httpClient.post(`${this.baseUrl}`, contact);
+    return this.httpClient.post(`${this.baseUrl}`, {
+      body: contact,
+    });
   }
 }
 export default new ContactsService();
