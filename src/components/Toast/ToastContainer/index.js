@@ -1,11 +1,14 @@
 import React from 'react';
 
 import { Container } from './styles';
+import ToastMessage from '../ToastMessage';
 
 function ToastContainer() {
   return (
     <Container>
-      oi
+      <ToastMessage text="Default toast" />
+      <ToastMessage text="Error toast" type="danger" />
+      <ToastMessage text="Success toast" type="success" />
     </Container>
   );
 }
