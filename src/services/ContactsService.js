@@ -6,8 +6,12 @@ class ContactsService {
     this.baseUrl = 'contacts';
   }
 
-  async listContacts(orderBy = 'asc') {
+  listContacts(orderBy = 'asc') {
     return this.httpClient.get(`${this.baseUrl}?orderBy=${orderBy}`);
+  }
+
+  getContactById(id) {
+    return this.httpClient.get(`${this.baseUrl}/${id}`);
   }
 
   createContact(contact) {
