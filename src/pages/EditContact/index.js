@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import ContactForm from '../../components/ContactForm';
 import ContactsService from '../../services/ContactsService';
 import Loader from '../../components/Loader';
-import { toastError } from '../../utils/toast';
+import { toastError, toastSuccess } from '../../utils/toast';
 
 function NewContact() {
   const params = useParams();
@@ -13,12 +13,16 @@ function NewContact() {
 
   const history = useHistory();
 
+  const contactFormRef = useRef(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadContact() {
       try {
-        await ContactsService.getContactById(id);
+        const contact = await ContactsService.getContactById(id);
+
+        contactFormRef.current.setFieldValues(contact);
 
         setLoading(false);
       } catch (error) {
@@ -29,20 +33,30 @@ function NewContact() {
     loadContact();
   }, [history, id]);
 
-  async function handleSubmit() {
-    //
+  async function handleSubmit(values) {
+    try {
+      const contact = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        category_id: values.categoryId,
+      };
+      await ContactsService.createContact(contact);
 
-    return null;
+      toastSuccess('Contato editado com sucesso.');
+    } catch (error) {
+      toastError('Ocorreu um erro ao editar o contato');
+    }
   }
   return (
     <>
       <Loader isLoading={loading} />
       <PageHeader title="Editar" />
       <ContactForm
+        ref={contactFormRef}
         buttonLabel="Salvar alterações"
-        // eslint-disable-next-line react/jsx-no-bind
+                // eslint-disable-next-line react/jsx-no-bind
         onSubmit={handleSubmit}
-        l
       />
     </>
   );

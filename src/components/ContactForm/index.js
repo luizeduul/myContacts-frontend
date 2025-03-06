@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-no-bind */
-import React, { useEffect, useState } from 'react';
+import React, {
+  forwardRef, useEffect, useImperativeHandle, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { ButtonContainer, Form } from './styles';
 import { FormGroup } from '../FormGroup';
@@ -12,7 +14,7 @@ import useErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import CategoriesService from '../../services/CategoriesService';
 
-function ContactForm({ buttonLabel, onSubmit }) {
+const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -73,6 +75,15 @@ function ContactForm({ buttonLabel, onSubmit }) {
       removeError('email');
     }
   }
+
+  useImperativeHandle(ref, () => ({
+    setFieldValues: (contact) => {
+      setName(contact.name);
+      setEmail(contact.email);
+      setPhone(contact.phone);
+      setCategoryId(contact.category_id);
+    },
+  }), []);
 
   function handleChangePhone(event) {
     setPhone(formatPhone(event.target.value));
@@ -137,7 +148,7 @@ function ContactForm({ buttonLabel, onSubmit }) {
       </ButtonContainer>
     </Form>
   );
-}
+});
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
