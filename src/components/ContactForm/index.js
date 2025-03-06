@@ -48,6 +48,11 @@ function ContactForm({ buttonLabel, onSubmit }) {
     });
 
     setSubmitting(false);
+
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCategoryId('');
   }
 
   function handleChangeName(event) {
