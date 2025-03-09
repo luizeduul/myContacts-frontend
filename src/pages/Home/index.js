@@ -22,6 +22,7 @@ import emptyBox from '../../assets/images/empty-box.svg';
 import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 import ContactsService from '../../services/ContactsService';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 
 export default function Home() {
   const [contacts, setContacts] = useState([]);
@@ -72,6 +73,11 @@ export default function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+      <Modal
+        title="Tem certeza que deseja remover o contato?"
+        danger
+        confirmLabel="Deletar"
+      />
       {contacts.length ? (
         <InputSearchContainer>
           <input
