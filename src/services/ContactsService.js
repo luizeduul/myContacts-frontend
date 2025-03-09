@@ -19,5 +19,11 @@ class ContactsService {
       body: contact,
     });
   }
+
+  updateContact(id, contact) {
+    return this.httpClient.put(`${this.baseUrl}/${id}`, {
+      body: contact,
+    });
+  }
 }
 export default new ContactsService();

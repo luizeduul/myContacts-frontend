@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import ContactForm from '../../components/ContactForm';
@@ -16,6 +18,7 @@ function NewContact() {
   const contactFormRef = useRef(null);
 
   const [loading, setLoading] = useState(true);
+  const [contactName, setContactName] = useState('');
 
   useEffect(() => {
     async function loadContact() {
@@ -23,6 +26,8 @@ function NewContact() {
         const contact = await ContactsService.getContactById(id);
 
         contactFormRef.current.setFieldValues(contact);
+
+        setContactName(contact?.name);
 
         setLoading(false);
       } catch (error) {
@@ -33,7 +38,7 @@ function NewContact() {
     loadContact();
   }, [history, id]);
 
-  async function handleSubmit(values) {
+  const handleSubmit = useCallback(async (values) => {
     try {
       const contact = {
         name: values.name,
@@ -41,21 +46,23 @@ function NewContact() {
         phone: values.phone,
         category_id: values.categoryId,
       };
-      await ContactsService.createContact(contact);
+      const response = await ContactsService.updateContact(id, contact);
+
+      setContactName(response?.name);
 
       toastSuccess('Contato editado com sucesso.');
     } catch (error) {
       toastError('Ocorreu um erro ao editar o contato');
     }
-  }
+  }, [id]);
+
   return (
     <>
       <Loader isLoading={loading} />
-      <PageHeader title="Editar" />
+      <PageHeader title={!loading ? `Editar ${contactName ?? ''}` : 'Carregando ...'} />
       <ContactForm
         ref={contactFormRef}
         buttonLabel="Salvar alterações"
-                // eslint-disable-next-line react/jsx-no-bind
         onSubmit={handleSubmit}
       />
     </>

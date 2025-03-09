@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import PageHeader from '../../components/PageHeader';
 import ContactForm from '../../components/ContactForm';
 import ContactsService from '../../services/ContactsService';
 import { toastError, toastSuccess } from '../../utils/toast';
 
 function NewContact() {
-  async function handleSubmit(values) {
+  const contactForm = useRef(null);
+  const handleSubmit = useCallback(async (values) => {
     try {
       const contact = {
         name: values.name,
@@ -19,13 +20,14 @@ function NewContact() {
     } catch (error) {
       toastError('Ocorreu um erro ao cadastrar o contato');
     }
-  }
+  }, []);
+
   return (
     <>
       <PageHeader title="Cadastrar novo" />
       <ContactForm
         buttonLabel="Cadastrar"
-        // eslint-disable-next-line react/jsx-no-bind
+        ref={contactForm}
         onSubmit={handleSubmit}
       />
     </>
