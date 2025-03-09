@@ -28,6 +28,13 @@ class HttpClient {
     });
   }
 
+  delete(path, options) {
+    return this.makeRequest(path, {
+      method: 'DELETE',
+      headers: options?.headers,
+    });
+  }
+
   async makeRequest(path, options) {
     const headers = new Headers();
 
@@ -51,7 +58,7 @@ class HttpClient {
 
     let responseBody = {};
 
-    if (contentType && contentType.includes('application/json')) {
+    if (contentType && contentType?.includes('application/json')) {
       responseBody = await response.json();
     }
 
