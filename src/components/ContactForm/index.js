@@ -1,6 +1,8 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-no-bind */
-import React, { useEffect, useState } from 'react';
+import React, {
+  forwardRef, useEffect, useImperativeHandle, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { ButtonContainer, Form } from './styles';
 import { FormGroup } from '../FormGroup';
@@ -8,22 +10,23 @@ import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
 import { isEmailValid } from '../../utils/validators';
-import useErrors from '../../hooks/useErrors';
+import useFieldErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import CategoriesService from '../../services/CategoriesService';
+import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 
-function ContactForm({ buttonLabel, onSubmit }) {
+const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [categpriesList, setCategoriesList] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categpriesList, setCategoriesList] = useSafeAsyncState([]);
+  const [loadingCategories, setLoadingCategories] = useSafeAsyncState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const {
     errors, setError, removeError, getErrorMessageByFieldName,
-  } = useErrors();
+  } = useFieldErrors();
 
   useEffect(() => {
     async function loadCategories() {
@@ -35,7 +38,7 @@ function ContactForm({ buttonLabel, onSubmit }) {
       }
     }
     loadCategories();
-  }, []);
+  }, [setCategoriesList, setLoadingCategories]);
 
   const isFormValid = name && !errors.length;
 
@@ -48,11 +51,6 @@ function ContactForm({ buttonLabel, onSubmit }) {
     });
 
     setSubmitting(false);
-
-    setName('');
-    setEmail('');
-    setPhone('');
-    setCategoryId('');
   }
 
   function handleChangeName(event) {
@@ -73,6 +71,22 @@ function ContactForm({ buttonLabel, onSubmit }) {
       removeError('email');
     }
   }
+
+  useImperativeHandle(ref, () => ({
+    setFieldValues: (contact) => {
+      setName(contact.name ?? '');
+      setEmail(contact.email ?? '');
+      setPhone(formatPhone(contact.phone ?? ''));
+      setCategoryId(contact.category_id ?? '');
+    },
+
+    resetFields: () => {
+      setName('');
+      setEmail('');
+      setPhone('');
+      setCategoryId('');
+    },
+  }), []);
 
   function handleChangePhone(event) {
     setPhone(formatPhone(event.target.value));
@@ -137,7 +151,7 @@ function ContactForm({ buttonLabel, onSubmit }) {
       </ButtonContainer>
     </Form>
   );
-}
+});
 ContactForm.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,

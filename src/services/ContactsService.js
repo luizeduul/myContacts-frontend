@@ -19,5 +19,15 @@ class ContactsService {
       body: contact,
     });
   }
+
+  updateContact(id, contact) {
+    return this.httpClient.put(`${this.baseUrl}/${id}`, {
+      body: contact,
+    });
+  }
+
+  deleteContact(id) {
+    return this.httpClient.delete(`${this.baseUrl}/${id}`);
+  }
 }
 export default new ContactsService();
