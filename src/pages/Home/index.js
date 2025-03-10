@@ -24,7 +24,7 @@ import ContactsService from '../../services/ContactsService';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { toastError, toastSuccess } from '../../utils/toast';
-import useSafeAsyncState from '../../hooks/useSafaAsyncState';
+import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 
 export default function Home() {
   const [contacts, setContacts] = useSafeAsyncState([]);

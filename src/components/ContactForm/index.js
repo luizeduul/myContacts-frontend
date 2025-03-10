@@ -13,7 +13,7 @@ import { isEmailValid } from '../../utils/validators';
 import useFieldErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import CategoriesService from '../../services/CategoriesService';
-import useSafeAsyncState from '../../hooks/useSafaAsyncState';
+import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 
 const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [name, setName] = useState('');

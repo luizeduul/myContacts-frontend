@@ -7,7 +7,7 @@ import ContactForm from '../../components/ContactForm';
 import ContactsService from '../../services/ContactsService';
 import Loader from '../../components/Loader';
 import { toastError, toastSuccess } from '../../utils/toast';
-import useSafeAsyncState from '../../hooks/useSafaAsyncState';
+import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 import useIsMounted from '../../hooks/useIsMounted';
 
 function NewContact() {
