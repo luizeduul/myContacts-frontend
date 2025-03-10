@@ -8,6 +8,7 @@ import ContactsService from '../../services/ContactsService';
 import Loader from '../../components/Loader';
 import { toastError, toastSuccess } from '../../utils/toast';
 import useSafeAsyncState from '../../hooks/useSafaAsyncState';
+import useIsMounted from '../../hooks/useIsMounted';
 
 function NewContact() {
   const params = useParams();
@@ -21,23 +22,29 @@ function NewContact() {
   const [loading, setLoading] = useSafeAsyncState(true);
   const [contactName, setContactName] = useSafeAsyncState('');
 
+  const isMounted = useIsMounted();
+
   useEffect(() => {
     async function loadContact() {
       try {
         const contact = await ContactsService.getContactById(id);
 
-        contactFormRef.current.setFieldValues(contact);
+        if (isMounted()) {
+          contactFormRef.current.setFieldValues(contact);
 
-        setContactName(contact?.name);
+          setContactName(contact?.name);
 
-        setLoading(false);
+          setLoading(false);
+        }
       } catch (error) {
-        history.push('/');
-        toastError(error?.message || 'Ocorreu um erro ao carregar o contato');
+        if (isMounted()) {
+          history.push('/');
+          toastError(error?.message || 'Ocorreu um erro ao carregar o contato');
+        }
       }
     }
     loadContact();
-  }, [history, id, setContactName, setLoading]);
+  }, [history, id, setContactName, setLoading, isMounted]);
 
   const handleSubmit = useCallback(async (values) => {
     try {
