@@ -8,7 +8,7 @@ import ContactsService from '../../services/ContactsService';
 import Loader from '../../components/Loader';
 import { toastError, toastSuccess } from '../../utils/toast';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
-import useIsMounted from '../../hooks/useIsMounted';
+import useSafeAsyncAction from '../../hooks/useSafeAsyncAction';
 
 function NewContact() {
   const params = useParams();
@@ -22,29 +22,35 @@ function NewContact() {
   const [loading, setLoading] = useSafeAsyncState(true);
   const [contactName, setContactName] = useSafeAsyncState('');
 
-  const isMounted = useIsMounted();
+  const safeAsyncAction = useSafeAsyncAction();
 
   useEffect(() => {
     async function loadContact() {
       try {
         const contact = await ContactsService.getContactById(id);
 
-        if (isMounted()) {
+        safeAsyncAction(() => {
           contactFormRef.current.setFieldValues(contact);
 
           setContactName(contact?.name);
 
           setLoading(false);
-        }
+        });
       } catch (error) {
-        if (isMounted()) {
+        safeAsyncAction(() => {
           history.push('/');
           toastError(error?.message || 'Ocorreu um erro ao carregar o contato');
-        }
+        });
       }
     }
     loadContact();
-  }, [history, id, setContactName, setLoading, isMounted]);
+  }, [
+    history,
+    id,
+    setContactName,
+    setLoading,
+    safeAsyncAction,
+  ]);
 
   const handleSubmit = useCallback(async (values) => {
     try {
