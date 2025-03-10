@@ -10,22 +10,23 @@ import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
 import { isEmailValid } from '../../utils/validators';
-import useErrors from '../../hooks/useErrors';
+import useFieldErrors from '../../hooks/useErrors';
 import formatPhone from '../../utils/formatPhone';
 import CategoriesService from '../../services/CategoriesService';
+import useSafeAsyncState from '../../hooks/useSafaAsyncState';
 
 const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [categpriesList, setCategoriesList] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [categpriesList, setCategoriesList] = useSafeAsyncState([]);
+  const [loadingCategories, setLoadingCategories] = useSafeAsyncState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const {
     errors, setError, removeError, getErrorMessageByFieldName,
-  } = useErrors();
+  } = useFieldErrors();
 
   useEffect(() => {
     async function loadCategories() {
@@ -37,7 +38,7 @@ const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
       }
     }
     loadCategories();
-  }, []);
+  }, [setCategoriesList, setLoadingCategories]);
 
   const isFormValid = name && !errors.length;
 

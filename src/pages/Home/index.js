@@ -24,16 +24,17 @@ import ContactsService from '../../services/ContactsService';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import { toastError, toastSuccess } from '../../utils/toast';
+import useSafeAsyncState from '../../hooks/useSafaAsyncState';
 
 export default function Home() {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useSafeAsyncState([]);
   const [orderBy, setOrderBy] = useState('asc');
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useSafeAsyncState(false);
+  const [hasError, setHasError] = useSafeAsyncState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
-  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useSafeAsyncState(null);
+  const [isLoadingDelete, setIsLoadingDelete] = useSafeAsyncState(false);
 
   const loadContacts = useCallback(async () => {
     setIsLoading(true);
@@ -49,14 +50,14 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-  }, [orderBy]);
+  }, [orderBy, setContacts, setHasError, setIsLoading]);
 
   useEffect(() => {
     loadContacts();
     return () => {
       setContacts([]);
     };
-  }, [loadContacts]);
+  }, [loadContacts, setContacts]);
 
   const filteredContacts = useMemo(() => {
     return contacts.filter((contact) => contact.name.toLowerCase().includes(search.toLowerCase()));

@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useRef,
 } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
@@ -7,6 +7,7 @@ import ContactForm from '../../components/ContactForm';
 import ContactsService from '../../services/ContactsService';
 import Loader from '../../components/Loader';
 import { toastError, toastSuccess } from '../../utils/toast';
+import useSafeAsyncState from '../../hooks/useSafaAsyncState';
 
 function NewContact() {
   const params = useParams();
@@ -17,8 +18,8 @@ function NewContact() {
 
   const contactFormRef = useRef(null);
 
-  const [loading, setLoading] = useState(true);
-  const [contactName, setContactName] = useState('');
+  const [loading, setLoading] = useSafeAsyncState(true);
+  const [contactName, setContactName] = useSafeAsyncState('');
 
   useEffect(() => {
     async function loadContact() {
@@ -36,7 +37,7 @@ function NewContact() {
       }
     }
     loadContact();
-  }, [history, id]);
+  }, [history, id, setContactName, setLoading]);
 
   const handleSubmit = useCallback(async (values) => {
     try {
@@ -54,7 +55,7 @@ function NewContact() {
     } catch (error) {
       toastError('Ocorreu um erro ao editar o contato');
     }
-  }, [id]);
+  }, [id, setContactName]);
 
   return (
     <>
