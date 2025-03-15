@@ -6,14 +6,8 @@ import { toastError, toastSuccess } from '../../utils/toast';
 
 function NewContact() {
   const contactForm = useRef(null);
-  const handleSubmit = useCallback(async (values) => {
+  const handleSubmit = useCallback(async (contact) => {
     try {
-      const contact = {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        category_id: values.categoryId,
-      };
       await ContactsService.createContact(contact);
 
       toastSuccess('Contato cadastrado com sucesso.');

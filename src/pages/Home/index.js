@@ -190,7 +190,7 @@ export default function Home() {
               <div className="info">
                 <div className="contact-name">
                   <strong>{contact.name}</strong>
-                  <small>{contact.category_name}</small>
+                  <small>{contact?.category?.name}</small>
                 </div>
                 <span>{contact.email}</span>
                 <span>{contact.phone}</span>
