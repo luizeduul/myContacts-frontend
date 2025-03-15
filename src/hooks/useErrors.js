@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function useFieldErrors() {
   const [errors, setErrors] = useState([]);
@@ -18,13 +18,13 @@ export default function useFieldErrors() {
     ]);
   }
 
-  function removeError(fieldName) {
+  const removeError = useCallback((fieldName) => {
     setErrors((prevState) => prevState.filter((item) => item.field !== fieldName));
-  }
+  }, []);
 
-  function getErrorMessageByFieldName(fieldName) {
-    return errors.find((error) => error.field === fieldName)?.message;
-  }
+  const getErrorMessageByFieldName = useCallback((fieldName) => (
+    errors.find((error) => error.field === fieldName)?.message
+  ), [errors]);
 
   return {
     errors,
