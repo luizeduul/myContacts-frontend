@@ -10,7 +10,7 @@ import { toastError, toastSuccess } from '../../utils/toast';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 import useSafeAsyncAction from '../../hooks/useSafeAsyncAction';
 
-function NewContact() {
+function EditContact() {
   const params = useParams();
 
   const { id } = params;
@@ -52,14 +52,8 @@ function NewContact() {
     safeAsyncAction,
   ]);
 
-  const handleSubmit = useCallback(async (values) => {
+  const handleSubmit = useCallback(async (contact) => {
     try {
-      const contact = {
-        name: values.name,
-        email: values.email,
-        phone: values.phone,
-        category_id: values.categoryId,
-      };
       const response = await ContactsService.updateContact(id, contact);
 
       setContactName(response?.name);
@@ -83,4 +77,4 @@ function NewContact() {
   );
 }
 
-export default NewContact;
+export default EditContact;
