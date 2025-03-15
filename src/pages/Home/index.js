@@ -58,7 +58,7 @@ export default function Home() {
 
       {isSearchEmpty && <SearchNotFound search={search} />}
 
-      {!hasContacts && (
+      {hasContacts && (
         <>
           <ContactsList
             filteredContacts={filteredContacts}
