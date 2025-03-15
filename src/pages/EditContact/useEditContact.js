@@ -6,9 +6,8 @@ import ContactsService from '../../services/ContactsService';
 import { toastError, toastSuccess } from '../../utils/toast';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
 import useSafeAsyncAction from '../../hooks/useSafeAsyncAction';
-import Presentation from './Presentation';
 
-function Container() {
+export default function useEditContact() {
   const params = useParams();
 
   const { id } = params;
@@ -62,14 +61,10 @@ function Container() {
     }
   }, [id, setContactName]);
 
-  return (
-    <Presentation
-      isLoading={loading}
-      contactName={contactName}
-      contactFormRef={contactFormRef}
-      onSubmit={handleSubmit}
-    />
-  );
+  return {
+    loading,
+    contactName,
+    contactFormRef,
+    handleSubmit,
+  };
 }
-
-export default Container;
