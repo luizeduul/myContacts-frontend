@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Footer, Overlay } from './styles';
 import Button from '../Button';
 import ReactPortal from '../ReactPortal';
+import useAnimatedUnmount from '../../hooks/useAnimatedUnmount';
 
 function Modal({
   title,
@@ -15,30 +16,13 @@ function Modal({
   onCancel,
   onConfirm,
 }) {
-  const [shouldRender, setShouldRender] = useState(visible);
-
-  useEffect(() => {
-    let timeoutId;
-    if (visible) {
-      setShouldRender(true);
-    }
-
-    if (!visible) {
-      timeoutId = setTimeout(() => {
-        setShouldRender(false);
-      }, 300);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [visible]);
+  const { shouldRender, animatedElementRef } = useAnimatedUnmount(visible);
 
   if (!shouldRender) return null;
 
   return (
     <ReactPortal containerId="modal-root">
-      <Overlay isLeaving={!visible}>
+      <Overlay isLeaving={!visible} ref={animatedElementRef}>
         <Container danger={danger} isLeaving={!visible}>
           <h1>{title}</h1>
           <div className="modal-body">
