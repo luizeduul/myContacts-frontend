@@ -2,7 +2,7 @@ import {
   useEffect,
 } from 'react';
 import { ToastEventManager } from '../../../utils/toast';
-import useAnimationList from '../../../hooks/useAnimationList';
+import useAnimatedList from '../../../hooks/useAnimatedList';
 
 export default function useToastContainer() {
   const {
@@ -11,7 +11,8 @@ export default function useToastContainer() {
     pendingRemovalItemsIds,
     handleRemoveItem: handleRemoveMessage,
     handleAnimationEnd,
-  } = useAnimationList();
+    renderList,
+  } = useAnimatedList();
 
   useEffect(() => {
     function handleAddToast({ type, text }) {
@@ -30,5 +31,6 @@ export default function useToastContainer() {
     handleRemoveMessage,
     pendingRemovalItemsIds,
     handleAnimationEnd,
+    renderList,
   };
 }

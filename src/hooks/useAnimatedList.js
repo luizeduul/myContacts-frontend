@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-export default function useAnimationList(initialValue = []) {
+export default function useAnimatedList(initialValue = []) {
   const [items, setItems] = useState(initialValue);
 
   const [pendingRemovalItemsIds, setPendingRemovalItemsIds] = useState([]);
@@ -14,11 +14,17 @@ export default function useAnimationList(initialValue = []) {
     setPendingRemovalItemsIds((prevState) => prevState.filter((itemId) => itemId !== id));
   }, []);
 
+  const renderList = useCallback((renderItem) => (
+    items.map((item) => renderItem(item, {
+      isLeaving: pendingRemovalItemsIds.includes(item.id),
+    }))
+  ), [items, pendingRemovalItemsIds]);
+
   return {
-    pendingRemovalItemsIds,
     handleRemoveItem,
     handleAnimationEnd,
     items,
     setItems,
+    renderList,
   };
 }
