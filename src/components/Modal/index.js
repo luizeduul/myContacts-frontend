@@ -39,7 +39,7 @@ function Modal({
   return (
     <ReactPortal containerId="modal-root">
       <Overlay isLeaving={!visible}>
-        <Container danger={danger}>
+        <Container danger={danger} isLeaving={!visible}>
           <h1>{title}</h1>
           <div className="modal-body">
             {children}
