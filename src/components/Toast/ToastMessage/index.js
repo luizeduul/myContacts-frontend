@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
 import { Container } from './styles';
 import xCircleIcons from '../../../assets/images/icons/x-circle.svg';
 import checkCircleIcons from '../../../assets/images/icons/check-circle.svg';
 
-export default function ToastMessage({
+function ToastMessage({
   message,
   onRemoveMessage,
   isLeaving,
@@ -55,3 +55,5 @@ ToastMessage.propTypes = {
   }).isRequired,
   animetedRef: PropTypes.shape({}).isRequired,
 };
+
+export default memo(ToastMessage);
