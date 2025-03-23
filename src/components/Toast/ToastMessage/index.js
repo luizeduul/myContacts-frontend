@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Container } from './styles';
 import xCircleIcons from '../../../assets/images/icons/x-circle.svg';
 import checkCircleIcons from '../../../assets/images/icons/check-circle.svg';
@@ -8,7 +8,7 @@ export default function ToastMessage({
   message,
   onRemoveMessage,
   isLeaving,
-  onAnimationEnd,
+  animetedRef,
 }) {
   const {
     type, id, text, duration,
@@ -17,25 +17,6 @@ export default function ToastMessage({
   const handleRemoveToast = useCallback(() => {
     onRemoveMessage(id);
   }, [onRemoveMessage, id]);
-
-  const animetedElemenetRef = useRef(null);
-
-  useEffect(() => {
-    const elementRef = animetedElemenetRef.current;
-    if (isLeaving) {
-      elementRef.addEventListener('animationend', () => {
-        onAnimationEnd(id);
-      });
-    }
-
-    return () => {
-      if (elementRef) {
-        elementRef.removeEventListener('animationend', () => {
-          onAnimationEnd(id);
-        });
-      }
-    };
-  }, [isLeaving, onAnimationEnd, id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -49,7 +30,7 @@ export default function ToastMessage({
 
   return (
     <Container
-      ref={animetedElemenetRef}
+      ref={animetedRef}
       type={type}
       onClick={handleRemoveToast}
       tabIndex={0}
@@ -72,5 +53,5 @@ ToastMessage.propTypes = {
     id: PropTypes.number.isRequired,
     duration: PropTypes.number,
   }).isRequired,
-  onAnimationEnd: PropTypes.func.isRequired,
+  animetedRef: PropTypes.shape({}).isRequired,
 };
