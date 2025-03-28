@@ -14,6 +14,7 @@ import Modal from '../../components/Modal';
 
 export default function Home() {
   const {
+    isPending,
     contacts,
     filteredContacts,
     orderBy,
