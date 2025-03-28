@@ -14,7 +14,6 @@ import Modal from '../../components/Modal';
 
 export default function Home() {
   const {
-    isPending,
     contacts,
     filteredContacts,
     orderBy,
@@ -31,8 +30,6 @@ export default function Home() {
     handleSearch,
     handletryAgain,
   } = useHome();
-
-  console.log({ isPending });
 
   const hasContacts = contacts.length > 0;
   const isListEmpty = !hasError && !hasContacts && !isLoading;

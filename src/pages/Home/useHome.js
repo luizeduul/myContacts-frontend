@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 import {
-  useCallback, useEffect, useState, useMemo, useTransition,
+  useCallback, useEffect, useState, useMemo,
+  useDeferredValue
 } from 'react';
 import ContactsService from '../../services/ContactsService';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
@@ -18,9 +19,8 @@ export default function useHome() {
   const [search, setSearch] = useState('');
   const [deferredSearch, setDerredSearch] = useState('');
 
-  const [isPending, startTransition] = useTransition({
-    timeoutMs: 500,
-  });
+
+  const deferredSerch = useDeferredValue(search);
 
   const loadContacts = useCallback(async () => {
     setIsLoading(true);
@@ -84,12 +84,7 @@ export default function useHome() {
   };
 
   const handleSearch = (e) => {
-    const { value } = e.target;
-    setSearch(value);
-
-    startTransition(() => {
-      setDerredSearch(value);
-    });
+    setSearch(e.target.value);
   };
 
   const handletryAgain = () => {
@@ -97,7 +92,6 @@ export default function useHome() {
   };
 
   return {
-    isPending,
     contacts,
     filteredContacts,
     orderBy,
