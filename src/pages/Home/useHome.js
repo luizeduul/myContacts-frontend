@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 import {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useEffect, useState, useTransition
 } from 'react';
 import ContactsService from '../../services/ContactsService';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
@@ -16,6 +16,12 @@ export default function useHome() {
   const [contactBeingDeleted, setContactBeingDeleted] = useSafeAsyncState(null);
   const [isLoadingDelete, setIsLoadingDelete] = useSafeAsyncState(false);
 
+  const [filteredContacts, setFilteredContacts] = useState([]);
+
+  const [isPending, startTransition] = useTransition({
+    timeoutMs: 500,
+  });
+
   const loadContacts = useCallback(async () => {
     setIsLoading(true);
 
@@ -25,6 +31,7 @@ export default function useHome() {
       setHasError(false);
 
       setContacts(contactsList);
+      setFilteredContacts(contactsList);
     } catch (error) {
       setContacts([]);
       setHasError(true);
@@ -40,22 +47,23 @@ export default function useHome() {
     };
   }, [loadContacts, setContacts]);
 
-  const filteredContacts = useMemo(() => {
-    return contacts.filter((contact) => contact.name.toLowerCase().includes(search.toLowerCase()));
-  }, [contacts, search]);
+  // const filteredContacts = useMemo(() => {
+  //   return contacts.filter((contact) =>
+  //  contact.name.toLowerCase().includes(search.toLowerCase()));
+  // }, [contacts, search]);
 
-  const handleChangeOrder = () => {
+  const handleChangeOrder = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  };
+  }, [setOrderBy]);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalVisible(false);
   };
 
-  const handleDeleteContact = (contact) => {
+  const handleDeleteContact = useCallback((contact) => {
     setContactBeingDeleted(contact);
     setIsDeleteModalVisible(true);
-  };
+  }, [setContactBeingDeleted, setIsDeleteModalVisible]);
 
   const handleDeleteConfirmContact = async () => {
     try {
@@ -63,8 +71,9 @@ export default function useHome() {
       await ContactsService.deleteContact(contactBeingDeleted.id);
 
       toastSuccess('Contato deletado com sucesso!');
-      // eslint-disable-next-line max-len
-      setContacts((prevState) => prevState.filter((contact) => contact.id !== contactBeingDeleted.id));
+      setContacts((prevState) => (
+        prevState.filter((contact) => contact.id !== contactBeingDeleted.id)
+      ));
       handleCloseDeleteModal();
       setContactBeingDeleted(null);
     } catch (error) {
@@ -75,7 +84,13 @@ export default function useHome() {
   };
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
+    const { value } = e.target;
+    setSearch(value);
+
+    startTransition(() => {
+      setFilteredContacts(contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(value.toLowerCase())));
+    });
   };
 
   const handletryAgain = () => {
@@ -83,6 +98,7 @@ export default function useHome() {
   };
 
   return {
+    isPending,
     contacts,
     filteredContacts,
     orderBy,
