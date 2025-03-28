@@ -32,6 +32,8 @@ export default function Home() {
     handletryAgain,
   } = useHome();
 
+  console.log({ isPending });
+
   const hasContacts = contacts.length > 0;
   const isListEmpty = !hasError && !hasContacts && !isLoading;
   const isSearchEmpty = !hasError && hasContacts && filteredContacts?.length === 0;

@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
 import {
-  useCallback, useEffect, useState, useTransition
+  useCallback, useEffect, useState, useMemo, useTransition,
 } from 'react';
 import ContactsService from '../../services/ContactsService';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
@@ -9,14 +9,14 @@ import { toastError, toastSuccess } from '../../utils/toast';
 export default function useHome() {
   const [contacts, setContacts] = useSafeAsyncState([]);
   const [orderBy, setOrderBy] = useState('asc');
-  const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useSafeAsyncState(false);
   const [hasError, setHasError] = useSafeAsyncState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [contactBeingDeleted, setContactBeingDeleted] = useSafeAsyncState(null);
   const [isLoadingDelete, setIsLoadingDelete] = useSafeAsyncState(false);
 
-  const [filteredContacts, setFilteredContacts] = useState([]);
+  const [search, setSearch] = useState('');
+  const [deferredSearch, setDerredSearch] = useState('');
 
   const [isPending, startTransition] = useTransition({
     timeoutMs: 500,
@@ -31,7 +31,6 @@ export default function useHome() {
       setHasError(false);
 
       setContacts(contactsList);
-      setFilteredContacts(contactsList);
     } catch (error) {
       setContacts([]);
       setHasError(true);
@@ -47,10 +46,11 @@ export default function useHome() {
     };
   }, [loadContacts, setContacts]);
 
-  // const filteredContacts = useMemo(() => {
-  //   return contacts.filter((contact) =>
-  //  contact.name.toLowerCase().includes(search.toLowerCase()));
-  // }, [contacts, search]);
+  const filteredContacts = useMemo(() => {
+    return contacts.filter(
+      (contact) => contact.name.toLowerCase().includes(deferredSearch.toLowerCase()),
+    );
+  }, [contacts, deferredSearch]);
 
   const handleChangeOrder = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
@@ -88,8 +88,7 @@ export default function useHome() {
     setSearch(value);
 
     startTransition(() => {
-      setFilteredContacts(contacts.filter((contact) =>
-        contact.name.toLowerCase().includes(value.toLowerCase())));
+      setDerredSearch(value);
     });
   };
 
