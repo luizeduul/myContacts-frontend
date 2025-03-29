@@ -1,7 +1,7 @@
 import {
   useCallback, useEffect, useRef,
 } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ContactsService from '../../services/ContactsService';
 import { toastError, toastSuccess } from '../../utils/toast';
 import useSafeAsyncState from '../../hooks/useSafeAsyncState';
@@ -12,7 +12,7 @@ export default function useEditContact() {
 
   const { id } = params;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const contactFormRef = useRef(null);
 
@@ -40,7 +40,7 @@ export default function useEditContact() {
         }
 
         safeAsyncAction(() => {
-          history.push('/');
+          navigate('/', { replace: true });
           toastError(error?.message || 'Ocorreu um erro ao carregar o contato');
         });
       }
@@ -51,7 +51,7 @@ export default function useEditContact() {
       controller.abort();
     };
   }, [
-    history,
+    navigate,
     id,
     setContactName,
     setLoading,
