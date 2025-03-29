@@ -12,10 +12,7 @@ export default defineConfig([
       ecmaVersion: "latest",
       sourceType: "module",
     },
-    plugins: {
-      react: pluginReact,
-      "react-hooks": pluginReactHooks,
-    },
+    plugins: [pluginReact, pluginReactHooks],
     rules: {
       ...js.configs.recommended.rules,
       ...pluginReact.configs.recommended.rules,

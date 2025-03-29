@@ -6,12 +6,11 @@ import edit from '../../../../assets/images/icons/pen.svg';
 import arrow from '../../../../assets/images/icons/arrow.svg';
 import trash from '../../../../assets/images/icons/trash.svg';
 import { Card, ListHeader } from './styles';
-
 function ContactsList({
-  filteredContacts,
   orderBy,
   onToggleOrderBy,
   onDeleteContact,
+  filteredContacts = [],
 }) {
   return (
     <>
@@ -65,10 +64,6 @@ ContactsList.propTypes = {
   orderBy: PropTypes.string.isRequired,
   onToggleOrderBy: PropTypes.func.isRequired,
   onDeleteContact: PropTypes.func.isRequired,
-};
-
-ContactsList.defaultProps = {
-  filteredContacts: [],
 };
 
 export default memo(ContactsList);
