@@ -4,8 +4,10 @@ import { StyledButton } from './styles';
 import Spinner from '../Spinner';
 
 function Button({
-  type, isLoading, disabled,
-  danger,
+  type = 'button',
+  isLoading = false,
+  disabled = false,
+  danger = false,
   children,
   onClick,
 }) {
@@ -22,14 +24,6 @@ function Button({
     </StyledButton>
   );
 }
-
-Button.defaultProps = {
-  type: 'button',
-  isLoading: false,
-  disabled: false,
-  danger: false,
-  onClick: undefined,
-};
 
 Button.propTypes = {
   type: PropTypes.string,
