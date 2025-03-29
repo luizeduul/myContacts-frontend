@@ -9,6 +9,7 @@ class HttpClient {
     return this.makeRequest(path, {
       method: 'GET',
       headers: options?.headers,
+      signal: options?.signal,
     });
   }
 
@@ -52,6 +53,7 @@ class HttpClient {
       method: options.method,
       body: options?.body ? JSON.stringify(options.body) : undefined,
       headers,
+      signal: options?.signal,
     });
 
     const contentType = response.headers.get('content-type');

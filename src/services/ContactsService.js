@@ -7,13 +7,13 @@ class ContactsService {
     this.baseUrl = 'contacts';
   }
 
-  async listContacts(orderBy = 'asc') {
-    const contacts = await this.httpClient.get(`${this.baseUrl}?orderBy=${orderBy}`);
+  async listContacts(orderBy = 'asc', signal) {
+    const contacts = await this.httpClient.get(`${this.baseUrl}?orderBy=${orderBy}`, { signal });
     return contacts?.map(ContactMapper.toDomain);
   }
 
-  async getContactById(id) {
-    const contact = await this.httpClient.get(`${this.baseUrl}/${id}`);
+  async getContactById(id, signal) {
+    const contact = await this.httpClient.get(`${this.baseUrl}/${id}`, { signal });
     return ContactMapper.toDomain(contact);
   }
 
