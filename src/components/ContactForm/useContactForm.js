@@ -22,15 +22,21 @@ export function useContactForm({
   } = useFieldErrors();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function loadCategories() {
       try {
-        const categories = await CategoriesService.listCategories();
+        const categories = await CategoriesService.listCategories('asc', controller.signal);
         setCategoriesList(categories);
       } catch { } finally {
         setLoadingCategories(false);
       }
     }
     loadCategories();
+
+    return () => {
+      controller.abort();
+    };
   }, [setCategoriesList, setLoadingCategories]);
 
   const isFormValid = name && !errors.length;
