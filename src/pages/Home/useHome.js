@@ -1,5 +1,4 @@
-/* eslint-disable arrow-body-style */
-import {
+ import {
   useCallback, useEffect, useState, useMemo,
   useDeferredValue
 } from 'react';
