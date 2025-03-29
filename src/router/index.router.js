@@ -5,6 +5,17 @@ import EditContactPage from '../pages/EditContact';
 import NewContact from '../pages/NewContact';
 
 export default function Router() {
+
+  // const routes = useRoutes(
+  //   [
+  //     { path: '/', element: <Home /> },
+  //     { path: '/novo', element: <NewContact /> },
+  //     { path: '/:id', element: <EditContactPage /> },
+  //   ]
+  // );
+
+  // return routes;
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
